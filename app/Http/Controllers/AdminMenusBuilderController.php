@@ -197,7 +197,7 @@ class AdminMenusBuilderController extends Controller
 
             }
 
-            if(subDomain() !== 'localhost'){
+            if(\Arr::first(explode('.', request()->getHost())) != 'localhost'){
               Artisan::call('optimize');
             }
 
@@ -241,7 +241,7 @@ class AdminMenusBuilderController extends Controller
 
         $menuItem->delete();
 
-        if(subDomain() !== 'localhost'){
+        if(\Arr::first(explode('.', request()->getHost())) != 'localhost'){
           Artisan::call('optimize');
         }
 
