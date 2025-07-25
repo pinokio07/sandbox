@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\Setup\CurrencyRequest;
+use App\Services\Setup\CurrencyService;
 use App\Models\RefCurrency;
 use App\Exports\SetupExport;
 use App\Imports\SetupImport;
@@ -50,22 +52,9 @@ class SetupCurrencyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CurrencyRequest $request, CurrencyService $currencyService)
     {
-        $data = $request->validate([
-          'RX_Code' => 'required',
-          'RX_Symbol' => 'required',
-          'RX_Desc' => 'required',
-          'RX_UnitName' => 'required'
-        ]);
-
-        if($data){
-          $currency = RefCurrency::create($request->all());
-          $currency->RX_IsActive = true;
-          $currency->save();
-
-          return redirect('/setup/currency/'.$currency->id.'/edit')->with('sukses', 'Add Currency Success');
-        }
+        return $currencyService->store($request->validated());          
     }
 
     /**
@@ -103,20 +92,9 @@ class SetupCurrencyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RefCurrency $currency)
+    public function update(CurrencyRequest $request, RefCurrency $currency, CurrencyService $currencyService)
     {
-        $data = $request->validate([
-          'RX_Code' => 'required',
-          'RX_Symbol' => 'required',
-          'RX_Desc' => 'required',
-          'RX_UnitName' => 'required'
-        ]);
-
-        if($data){
-          $currency->update($request->all());
-
-          return redirect('/setup/currency/'.$currency->id.'/edit')->with('sukses', 'Edit Currency Success');
-        }
+        return $currencyService->update($request->validated(), $currency);
     }
 
     /**

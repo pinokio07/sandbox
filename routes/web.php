@@ -106,7 +106,7 @@ Route::middleware(['auth'])->group(function () {
       }     
         
     } catch (\Throwable $th) {
-      throw $th;
+      // throw $th;
     }
   
   });
