@@ -19,12 +19,20 @@ class CurrencyService
           // Commit Changes
           DB::commit(); 
           // Return Redirect
-          return redirect('/setup/currency/'.$currency->id.'/edit')->with('sukses', 'Add Currency Success');
+          // return redirect('/setup/currency/'.$currency->id.'/edit')->with('sukses', 'Add Currency Success');
+          return [
+            'status' => 'OK',
+            'id' => $currency->id
+          ];
         } catch (\Throwable $th) {
           //Rollback Changes
           DB::rollback();
           // Return Redirect
-          return redirect()->back()->with('gagal', $th->getMessage());
+          // return redirect()->back()->with('gagal', $th->getMessage());
+          return [
+            'status' => 'error',
+            'message' => $th->getMessage()
+          ];
         }
     }
 

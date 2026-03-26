@@ -54,7 +54,28 @@ class SetupCurrencyController extends Controller
      */
     public function store(CurrencyRequest $request, CurrencyService $currencyService)
     {
-        return $currencyService->store($request->validated());          
+        $results = $currencyService->store($request->validated());
+        
+        if($results['status'] != 'OK') {
+          if ($request->ajax()) {
+            return response()->json([
+              'status' => 'ERROR',
+              'message' => $results['message']
+            ]);
+          } 
+
+          return redirect()->back()->with('gagal', $results['message']);
+        }
+
+        if ($request->ajax()) {
+          return response()->json([
+            'status' => 'OK',
+            'message' => 'Store House Success'
+          ]);
+        }
+
+        return to_route('manifest.shipments.edit', ['shipment' => $results['id']])->with('sukses', 'Store House Success');
+                
     }
 
     /**
